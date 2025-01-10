@@ -14,7 +14,7 @@ class NetworkMahasiswaRepository (
     override suspend fun getAllMahasiswa(): Flow<List<Mahasiswa>> = callbackFlow{
 
         val mhsCollection = firestore.collection("Mahasiswa")
-            .orderBy("nim",Query.Direction.ASCENDING)
+            .orderBy("nim",Query.Direction.DESCENDING)
             .addSnapshotListener{value, error ->
 
                 if (value !=null){
@@ -29,19 +29,52 @@ class NetworkMahasiswaRepository (
     }
 
     override suspend fun insertMahasiswa(mahasiswa: Mahasiswa) {
-        TODO("Not yet implemented")
+        try {
+            firestore.collection("Mahasiswa").add(mahasiswa).await()
+
+        }catch (e:Exception) {
+            throw Exception ("Gagal menambahkan data mmahasiswa: $ {e.message}")
+        }
     }
 
     override suspend fun updateMahasiswa(nim: String, mahasiswa: Mahasiswa) {
-        TODO("Not yet implemented")
+        try {
+            firestore.collection("Mahasiswa")
+                .document(mahasiswa.nim)
+                .set(mahasiswa)
+                .await()
+        } catch (e:Exception) {
+            throw Exception ("Gagal mengupdate data mmahasiswa: $ {e.message}")
+
+        }
     }
 
-    override suspend fun deletedMahasiswa(nim: String) {
-        TODO("Not yet implemented")
+    override suspend fun deletedMahasiswa(nim: String, mahasiswa: Mahasiswa) {
+        try {
+            firestore.collection("Mahasiswa")
+                .document(mahasiswa.nim)
+                .delete()
+                .await()
+        } catch (e:Exception) {
+            throw Exception ("Gagal menghapus data mmahasiswa: $ {e.message}")
+
+        }
     }
 
-    override suspend fun getMahasiswaByNim(nim: String): Flow<Mahasiswa> {
-        TODO("Not yet implemented")
+    override suspend fun getMahasiswaByNim(nim: String): Flow<Mahasiswa> = callbackFlow{
+        val mhsDocument = firestore.collection("Mahasiswa")
+            .document(nim)
+            .addSnapshotListener { value, error ->
+                if (value != null) {
+                    val mhs = value.toObject(Mahasiswa::class.java)!!
+                    trySend(mhs)
+                }
+
+
+            }
+        awaitClose{
+            mhsDocument.remove()
+        }
     }
 
 }
