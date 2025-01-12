@@ -2,10 +2,13 @@ package com.example.praktikum9.ui.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
@@ -166,3 +169,17 @@ fun FormMahasiswa(
             text = errorState.nama ?: "",
             color = Color.Red
         )
+// Input NIM
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = mahasiswaEvent.nim,
+            onValueChange = {
+                onValueChange(mahasiswaEvent.copy(nim = it))
+            },
+            label = { Text("NIM") },
+            isError = errorState.nim != null,
+            placeholder = { Text("Masukkan NIM") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Text(text = errorState.nim ?: "", color = Color.Red)
+        Spacer(modifier = Modifier.height(16.dp))
