@@ -2,6 +2,20 @@ package com.example.praktikum9.ui.viewmodel
 
 import com.example.praktikum9.model.Mahasiswa
 
+// Sealed class untuk state form
+sealed class FormState {
+    object Idle : FormState()
+    object Loading : FormState()
+    data class Success(val message: String) : FormState()
+    data class Error(val message: String) : FormState()
+}
+
+// State untuk UI form
+data class InsertUiState(
+    val insertUiEvent: MahasiswaEvent = MahasiswaEvent(),
+    val isEntryValid: FormErrorState = FormErrorState(),
+)
+
 // State validasi error untuk form
 data class FormErrorState(
     val nim: String? = null,
