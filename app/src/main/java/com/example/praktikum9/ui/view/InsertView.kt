@@ -248,3 +248,19 @@ fun FormMahasiswa(
             text = errorState.kelas ?: "",
             color = Color.Red
         )
+
+        // Input Angkatan
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = mahasiswaEvent.angkatan,
+            onValueChange = {
+                onValueChange(mahasiswaEvent.copy(angkatan = it))
+            },
+            label = { Text("Angkatan") },
+            isError = errorState.angkatan != null,
+            placeholder = { Text("Masukkan angkatan") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Text(text = errorState.angkatan ?: "", color = Color.Red)
+    }
+}
