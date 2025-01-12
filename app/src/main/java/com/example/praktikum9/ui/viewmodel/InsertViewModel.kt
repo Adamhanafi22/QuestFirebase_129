@@ -4,8 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.praktikum9.model.Mahasiswa
 import com.example.praktikum9.repository.MahasiswaRepository
+import kotlinx.coroutines.launch
 
 class InsertViewModel(
     private val mhs: MahasiswaRepository
@@ -36,7 +38,32 @@ class InsertViewModel(
         uiEvent = uiEvent.copy(isEntryValid = errorState)
         return errorState.isValid()
     }
+    // Menyimpan data mahasiswa ke Firestore
+    fun insertMhs() {
+        if (validateFields()) {
+            viewModelScope.launch {
+                uiState = FormState.Loading
+                try {
+                    mhs.insertMahasiswa(uiEvent.insertUiEvent.toMhsModel())
+                    uiState = FormState.Success("Data berhasil disimpan")
+                } catch (e: Exception) {
+                    uiState = FormState.Error("Data gagal disimpan")
+                }
+            }
+        } else {
+            uiState = FormState.Error("Data tidak valid")
+        }
+    }
 
+    fun resetForm() {
+        uiEvent = InsertUiState()
+        uiState = FormState.Idle
+    }
+
+    fun resetSnackBarMessage() {
+        uiState = FormState.Idle
+    }
+}
 
 // Sealed class untuk state form
 sealed class FormState {
@@ -67,7 +94,6 @@ data class FormErrorState(
     }
 }
 
-
 // Event input form mahasiswa
 data class MahasiswaEvent(
     val nim: String = "",
@@ -87,4 +113,3 @@ fun MahasiswaEvent.toMhsModel(): Mahasiswa = Mahasiswa(
     kelas = kelas,
     angkatan = angkatan
 )
-
