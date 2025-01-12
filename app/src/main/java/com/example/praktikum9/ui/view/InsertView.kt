@@ -225,3 +225,26 @@ fun FormMahasiswa(
         )
         Text(text = errorState.alamat ?: "", color = Color.Red)
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Input Kelas
+        Text(text = "Kelas")
+        Row {
+            kelas.forEach { kelas ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    RadioButton(
+                        selected = mahasiswaEvent.kelas == kelas,
+                        onClick = {
+                            onValueChange(mahasiswaEvent.copy(kelas = kelas))
+                        },
+                    )
+                    Text(text = kelas)
+                }
+            }
+        }
+        Text(
+            text = errorState.kelas ?: "",
+            color = Color.Red
+        )
