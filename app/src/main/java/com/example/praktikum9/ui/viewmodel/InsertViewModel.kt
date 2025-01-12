@@ -1,6 +1,27 @@
 package com.example.praktikum9.ui.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import com.example.praktikum9.model.Mahasiswa
+import com.example.praktikum9.repository.MahasiswaRepository
+
+class InsertViewModel(
+    private val mhs: MahasiswaRepository
+) : ViewModel() {
+    var uiEvent: InsertUiState by mutableStateOf(InsertUiState())
+        private set
+    var uiState: FormState by mutableStateOf(FormState.Idle)
+        private set
+
+    // Memperbarui state berdasarkan input pengguna
+    fun updateState(mahasiswaEvent: MahasiswaEvent) {
+        uiEvent = uiEvent.copy(
+            insertUiEvent = mahasiswaEvent,
+        )
+    }
+
 
 // Sealed class untuk state form
 sealed class FormState {
