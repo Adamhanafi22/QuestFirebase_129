@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -37,7 +38,7 @@ import com.example.praktikum9.ui.viewmodel.MahasiswaEvent
 import com.example.praktikum9.ui.viewmodel.PenyediaViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InsertMhsView(
     onBack: () -> Unit,
@@ -62,11 +63,13 @@ fun InsertMhsView(
                 onNavigate()
                 viewModel.resetSnackBarMessage() // Reset snackbar state
             }
+
             is FormState.Error -> {
                 coroutineScope.launch {
                     snackbarHostState.showSnackbar(uiState.message)
                 }
             }
+
             else -> Unit
         }
     }
@@ -103,9 +106,11 @@ fun InsertMhsView(
                 }
             )
         }
+    }
+}
 
-        @Composable
-        fun InsertBodyMhs(
+@Composable
+fun InsertBodyMhs(
             modifier: Modifier = Modifier,
             onValueChange: (MahasiswaEvent) -> Unit,
             uiState: InsertUiState,
@@ -142,8 +147,7 @@ fun InsertMhsView(
                 }
             }
         }
-    }
-}
+
 @Composable
 fun FormMahasiswa(
     mahasiswaEvent: MahasiswaEvent = MahasiswaEvent(),
@@ -198,9 +202,9 @@ fun FormMahasiswa(
                     horizontalArrangement = Arrangement.Start
                 ) {
                     RadioButton(
-                        selected = mahasiswaEvent.gender == jk,
+                        selected = mahasiswaEvent.jenis_kelamin == jk,
                         onClick = {
-                            onValueChange(mahasiswaEvent.copy(gender = jk))
+                            onValueChange(mahasiswaEvent.copy(jenis_kelamin = jk))
                         },
                     )
                     Text(text = jk)
@@ -208,7 +212,7 @@ fun FormMahasiswa(
             }
         }
         Text(
-            text = errorState.gender ?: "",
+            text = errorState.jenis_kelamin ?: "",
             color = Color.Red
         )
 
