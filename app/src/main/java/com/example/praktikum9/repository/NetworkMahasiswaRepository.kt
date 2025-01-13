@@ -6,6 +6,7 @@ import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
 class NetworkMahasiswaRepository (
     private val firestore: FirebaseFirestore
@@ -30,7 +31,10 @@ class NetworkMahasiswaRepository (
 
     override suspend fun insertMahasiswa(mahasiswa: Mahasiswa) {
         try {
-            firestore.collection("Mahasiswa").add(mahasiswa).await()
+            firestore.collection("Mahasiswa")
+                .document(mahasiswa.nim)
+                .set(mahasiswa)
+                .await()
 
         }catch (e:Exception) {
             throw Exception ("Gagal menambahkan data mmahasiswa: $ {e.message}")
@@ -49,7 +53,7 @@ class NetworkMahasiswaRepository (
         }
     }
 
-    override suspend fun deletedMahasiswa(nim: String, mahasiswa: Mahasiswa) {
+    override suspend fun deletedMahasiswa( mahasiswa: Mahasiswa) {
         try {
             firestore.collection("Mahasiswa")
                 .document(mahasiswa.nim)
