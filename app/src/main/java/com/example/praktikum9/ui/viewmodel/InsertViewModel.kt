@@ -33,7 +33,10 @@ class InsertViewModel(
             jenis_kelamin = if (event.jenis_kelamin.isNotEmpty()) null else "Jenis Kelamin tidak boleh kosong",
             alamat = if (event.alamat.isNotEmpty()) null else "Alamat tidak boleh kosong",
             kelas = if (event.kelas.isNotEmpty()) null else "Kelas tidak boleh kosong",
-            angkatan = if (event.angkatan.isNotEmpty()) null else "Angkatan tidak boleh kosong"
+            angkatan = if (event.angkatan.isNotEmpty()) null else "Angkatan tidak boleh kosong",
+            judulskripsi = if (event.judulskripsi.isNotEmpty()) null else "Judul Skripsi tidak boleh kosong",
+            dospemsatu = if (event.dospemsatu.isNotEmpty()) null else "Dospem satu tidak boleh kosong",
+            dospemdua = if (event.dospemdua.isNotEmpty()) null else "Dospem dua tidak boleh kosong"
         )
         uiEvent = uiEvent.copy(isEntryValid = errorState)
         return errorState.isValid()
@@ -86,11 +89,14 @@ data class FormErrorState(
     val jenis_kelamin: String? = null,
     val alamat: String? = null,
     val kelas: String? = null,
-    val angkatan: String? = null
+    val angkatan: String? = null,
+    val judulskripsi: String? = null,
+    val dospemsatu: String? = null,
+    val dospemdua: String? = null
 ) {
     fun isValid(): Boolean {
         return nim == null && nama == null && jenis_kelamin == null &&
-                alamat == null && kelas == null && angkatan == null
+                alamat == null && kelas == null && angkatan == null && judulskripsi == null && dospemsatu == null && dospemdua == null
     }
 }
 
@@ -101,7 +107,10 @@ data class MahasiswaEvent(
     val jenis_kelamin: String = "",
     val alamat: String = "",
     val kelas: String = "",
-    val angkatan: String = ""
+    val angkatan: String = "",
+    val judulskripsi: String = "",
+    val dospemsatu: String = "",
+    val dospemdua: String = ""
 )
 
 
@@ -112,5 +121,8 @@ fun MahasiswaEvent.toMhsModel(): Mahasiswa = Mahasiswa(
     jenis_kelamin = jenis_kelamin,
     alamat = alamat,
     kelas = kelas,
-    angkatan = angkatan
+    angkatan = angkatan,
+    judulskripsi = judulskripsi,
+    dospemsatu = dospemsatu,
+    dospemdua = dospemdua,
 )
