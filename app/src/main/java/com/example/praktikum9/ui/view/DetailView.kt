@@ -42,9 +42,7 @@ fun DetailMhsView(
     onBack: () -> Unit = { },
 
 ){
-    LaunchedEffect (Unit){
-        viewModel.getMhs()
-    }
+
     Scaffold(
         modifier = modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
